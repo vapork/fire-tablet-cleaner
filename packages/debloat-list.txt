@@ -1,0 +1,55 @@
+# ==============================================================================
+# Fire Tablet Debloat Package List
+# ==============================================================================
+# Packages listed here will be disabled via `pm disable-user --user 0 <pkg>`.
+# If a package cannot be disabled due to ROM protection, the script automatically
+# isolates it via AppOps and netpolicy.
+#
+# Lines starting with # are comments. Empty lines are ignored.
+# ==============================================================================
+
+# --- Amazon Shopping & Commerce ---
+com.amazon.windowshop                   # Shop Amazon application
+com.amazon.device.sale.service          # Amazon Device Sales and Promotions
+
+# --- Amazon Media & Streaming ---
+com.amazon.mp3                          # Amazon Music
+com.amazon.photos                       # Amazon Photos
+com.amazon.imdb.tv.mobile.app           # Freevee (formerly IMDb TV)
+com.audible.application.kindle          # Audible Audiobooks
+com.amazon.avod                         # Prime Video (optional - disable if using Netflix/third-party)
+com.amazon.bioscope                     # Amazon VideoStore backend
+com.amazon.cardinal                     # Alexa Video Player helper
+com.android.music                       # AOSP legacy music player
+
+# --- Amazon Kids & Family Clutter ---
+com.amazon.tahoe                        # Amazon Kids+ (FreeTime launcher)
+com.amazon.comms.kids                   # Amazon Kids Communications
+com.amazon.cloud9.kids                  # Silk Kids Browser sandbox
+com.amazon.ags.app                      # Amazon GameCircle / Game Hub
+
+# --- Alexa & Speech Infrastructure ---
+amazon.speech.sim                       # Alexa Speech Interaction Manager
+com.amazon.dee.app                      # Amazon Alexa main application
+com.amazon.alta.h2clientservice         # H2 voice client service
+com.amazon.h2settingsfortablet          # Alexa hands-free settings
+com.amazon.firespotlight                # Amazon Spotlight suggestions & promotions
+
+# --- Telemetry, Metrics & Device Tracking ---
+com.amazon.dp.logger                    # Diagnostic Protocol Logger
+com.amazon.wirelessmetrics.service      # Wi-Fi / Cellular telemetry metrics
+com.amazon.client.metrics               # Amazon Client Metrics service
+com.amazon.client.metrics.api           # Amazon Client Metrics API
+com.amazon.device.metrics               # Amazon Device Metrics reporter
+com.amazon.advertisingidsettings        # Advertising ID settings daemon
+com.amazon.hybridadidservice            # Hybrid Ad ID synchronization
+com.amazon.appverification              # Amazon App Verification telemetries
+com.amazon.application.compatibility.enforcer # App Compatibility Enforcer
+com.amazon.kor.demo                     # Retail demo mode service
+
+# --- Built-in Bloatware & Unneeded Utilities ---
+com.amazon.weather                      # Amazon Weather widget / app
+com.amazon.webapp                       # Amazon WebApp wrapper
+com.kingsoft.office.amz                 # WPS Office Amazon Edition
+com.amazon.whisperplay.contracts        # WhisperPlay contracts
+com.amazon.tcomm.jackson                # TComm telemetry transport
