@@ -290,8 +290,8 @@ if ($All -or $CompileAOT) {
         }
     }
 
-    if ($appList.Count -eq 0) {
-        Write-Info "No third-party apps found to compile. Compiling Fire Launcher..."
+    # Ensure home launcher is always compiled to AOT
+    if ($appList -notcontains "com.amazon.firelauncher") {
         $appList += "com.amazon.firelauncher"
     }
 

@@ -53,3 +53,9 @@ com.amazon.webapp                       # Amazon WebApp wrapper
 com.kingsoft.office.amz                 # WPS Office Amazon Edition
 com.amazon.whisperplay.contracts        # WhisperPlay contracts
 com.amazon.tcomm.jackson                # TComm telemetry transport
+com.amazon.kindle                       # Amazon Kindle e-reader
+com.amazon.dp.contacts                  # Amazon Contacts provider
+com.android.contacts                    # AOSP Contacts app
+com.amazon.dp.fbcontacts                # Amazon Facebook Contacts sync
+com.android.email                       # Amazon Email app
+com.amazon.csapp                        # Amazon Help / Customer Support (protected - isolated via AppOps)

@@ -155,9 +155,8 @@ run_aot_compile() {
     header "AOT Speed Compiling User Applications"
     APPS=$(adb_cmd "pm list packages -3" | cut -d ':' -f 2 | tr -d '\r' | grep -vE 'baronkiko|launcherhijack' || true)
     
-    if [ -z "$APPS" ]; then
-        APPS="com.amazon.firelauncher"
-    fi
+    # Always include the home launcher
+    APPS="$APPS com.amazon.firelauncher"
 
     for pkg in $APPS; do
         info "Compiling $pkg to native ARM64 speed mode..."
