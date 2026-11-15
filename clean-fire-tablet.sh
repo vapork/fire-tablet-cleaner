@@ -170,6 +170,26 @@ run_aot_compile() {
     success "AOT speed compilation complete."
 }
 
+run_hide_navbar() {
+    header "Enabling Full-Screen Gesture Navigation Mode"
+    info "Applying WindowManager overscan (0,0,0,-72) to hide legacy 3-button navbar..."
+    adb_cmd "wm overscan 0,0,0,-72"
+    for gApp in com.fb.fluid com.lagache.sylvain.mygesture com.ss.edgegestures; do
+        if adb_cmd "pm list packages $gApp" | grep -q "$gApp"; then
+            info "Granting WRITE_SECURE_SETTINGS to $gApp..."
+            adb_cmd "pm grant $gApp android.permission.WRITE_SECURE_SETTINGS" || true
+            success "Elevated permissions granted to $gApp."
+        fi
+    done
+    success "Navigation bar hidden. Display expanded to 100% full screen."
+}
+
+run_restore_navbar() {
+    header "Restoring 3-Button Navigation Bar"
+    adb_cmd "wm overscan reset"
+    success "Standard 3-button navigation bar restored."
+}
+
 # Menu or CLI Flags
 MODE="${1:-interactive}"
 case "$MODE" in
@@ -195,6 +215,12 @@ case "$MODE" in
     --aot)
         run_aot_compile
         ;;
+    --hide-navbar)
+        run_hide_navbar
+        ;;
+    --restore-navbar)
+        run_restore_navbar
+        ;;
     *)
         echo -e "\n${YELLOW}Select an optimization option:${NC}"
         echo "  [1] Complete Clean & Optimize (Recommended: All Features)"
@@ -203,6 +229,8 @@ case "$MODE" in
         echo "  [4] Strip Amazon Bloatware"
         echo "  [5] Clean Stock Home Screen (Remove Discover/Continue Row)"
         echo "  [6] AOT Speed Compile User Apps"
+        echo "  [7] Enable Full-Screen Gesture Navigation (Hide 3-Button Navbar)"
+        echo "  [8] Restore 3-Button Navigation Bar"
         echo "  [0] Exit"
         read -rp "Enter choice: " opt
         case "$opt" in
@@ -212,6 +240,8 @@ case "$MODE" in
             4) run_debloat ;;
             5) run_clean_home ;;
             6) run_aot_compile ;;
+            7) run_hide_navbar ;;
+            8) run_restore_navbar ;;
             *) exit 0 ;;
         esac
         ;;

@@ -46,6 +46,8 @@ param (
     [switch]$Debloat,
     [switch]$CleanHome,
     [switch]$CompileAOT,
+    [switch]$HideNavbar,
+    [switch]$RestoreNavbar,
     [switch]$Restore
 )
 
@@ -138,7 +140,7 @@ function Get-PackageUid($pkg) {
 }
 
 # Interactive Menu if no flags passed
-if (-not ($All -or $RemoveAds -or $DisableOTA -or $Debloat -or $CleanHome -or $CompileAOT -or $Restore)) {
+if (-not ($All -or $RemoveAds -or $DisableOTA -or $Debloat -or $CleanHome -or $CompileAOT -or $HideNavbar -or $RestoreNavbar -or $Restore)) {
     Write-Host "`nSelect an optimization option:" -ForegroundColor Yellow
     Write-Host "  [1] Complete Clean & Optimize (Recommended: All Features)"
     Write-Host "  [2] Remove Lockscreen Ads & Sponsored Content"
@@ -146,7 +148,9 @@ if (-not ($All -or $RemoveAds -or $DisableOTA -or $Debloat -or $CleanHome -or $C
     Write-Host "  [4] Strip Amazon Bloatware"
     Write-Host "  [5] Clean Stock Home Screen (Remove Discover/Continue Row)"
     Write-Host "  [6] AOT Speed Compile User Apps"
-    Write-Host "  [7] Restore Stock Settings"
+    Write-Host "  [7] Enable Full-Screen Gesture Navigation (Hide 3-Button Navbar)"
+    Write-Host "  [8] Restore 3-Button Navigation Bar"
+    Write-Host "  [9] Restore Stock Settings & Bloatware"
     Write-Host "  [0] Exit"
     $choice = Read-Host "`nEnter option"
 
@@ -157,7 +161,9 @@ if (-not ($All -or $RemoveAds -or $DisableOTA -or $Debloat -or $CleanHome -or $C
         "4" { $Debloat = $true }
         "5" { $CleanHome = $true }
         "6" { $CompileAOT = $true }
-        "7" { $Restore = $true }
+        "7" { $HideNavbar = $true }
+        "8" { $RestoreNavbar = $true }
+        "9" { $Restore = $true }
         default { exit 0 }
     }
 }
@@ -307,7 +313,32 @@ if ($All -or $CompileAOT) {
     Write-Success "AOT compilation complete."
 }
 
-# 6. RESTORE STOCK DEFAULTS
+# 6. GESTURE NAVIGATION & NAVBAR OVERSCAN
+if ($HideNavbar) {
+    Write-Header "Enabling Full-Screen Gesture Navigation Mode"
+    Write-Info "Applying WindowManager overscan (0,0,0,-72) to hide legacy 3-button navbar..."
+    Exec-AdbShell "wm overscan 0,0,0,-72"
+
+    # Grant WRITE_SECURE_SETTINGS to popular gesture navigation apps if installed
+    $gestureApps = @("com.fb.fluid", "com.lagache.sylvain.mygesture", "com.ss.edgegestures")
+    foreach ($gApp in $gestureApps) {
+        $check = Exec-AdbShell "pm list packages $gApp"
+        if ($check -match $gApp) {
+            Write-Info "Granting WRITE_SECURE_SETTINGS to $gApp..."
+            Exec-AdbShell "pm grant $gApp android.permission.WRITE_SECURE_SETTINGS"
+            Write-Success "Elevated permissions granted to $gApp."
+        }
+    }
+    Write-Success "Navigation bar hidden. Display expanded to 100% full screen."
+}
+
+if ($RestoreNavbar) {
+    Write-Header "Restoring 3-Button Navigation Bar"
+    Exec-AdbShell "wm overscan reset"
+    Write-Success "Standard 3-button navigation bar restored."
+}
+
+# 7. RESTORE STOCK DEFAULTS
 if ($Restore) {
     Write-Header "Restoring Stock Settings & Re-enabling Packages"
 

@@ -117,9 +117,11 @@ Available flags:
 * `-All`: Applies the full optimization suite.
 * `-RemoveAds`: Permanently removes lockscreen ads and blacklists KSO network access.
 * `-DisableOTA`: Quarantines Amazon OTA daemons to prevent self-healing sweeps.
-* `-Debloat`: Disables 28 pre-installed Amazon packages.
+* `-Debloat`: Disables pre-installed Amazon packages (including Alexa, shopping, Kindle, Contacts, Email, search, and telemetry).
 * `-CleanHome`: Removes the sponsored Discover and Continue rows from the stock home screen.
-* `-CompileAOT`: Compiles user apps directly to 64-bit native ARM machine code.
+* `-CompileAOT`: Compiles user apps directly to 64-bit native ARM machine code in `speed` mode.
+* `-HideNavbar`: Hides the legacy 3-button navigation bar via WindowManager overscan (0,0,0,-72) and grants `WRITE_SECURE_SETTINGS` to gesture apps.
+* `-RestoreNavbar`: Restores the stock 3-button navigation bar via overscan reset.
 * `-Restore`: Restores factory settings and re-enables all Amazon bloatware.
 
 ---
@@ -137,6 +139,28 @@ cd fire-tablet-cleaner
 chmod +x clean-fire-tablet.sh
 ./clean-fire-tablet.sh --all
 ```
+
+Or run individual actions:
+```bash
+./clean-fire-tablet.sh --hide-navbar     # Hide 3-button bar for gesture navigation
+./clean-fire-tablet.sh --restore-navbar  # Restore 3-button bar
+```
+
+---
+
+## Gesture Navigation Upgrade
+
+Fire OS 7 is built on Android 9 (API 28), where Amazon hardcoded the legacy 72-pixel 3-button navigation bar and removed native gesture settings.
+
+To get modern full-screen **edge-slide & corner-slide gesture navigation** (Back, Home, Recents):
+1. Install a gesture engine such as **Fluid Navigation Gestures (FNG)** (`com.fb.fluid`) or **My Gesture** (`com.lagache.sylvain.mygesture`) from Google Play Store or APK.
+2. Run `.\clean-fire-tablet.ps1 -HideNavbar` (or `./clean-fire-tablet.sh --hide-navbar`).
+   * This automatically shifts WindowManager overscan by `-72px`, hiding the black navigation bar completely.
+   * Automatically grants `android.permission.WRITE_SECURE_SETTINGS` to the gesture app so it can manage immersive mode without root.
+3. Configure your preferred swipe actions in the gesture app:
+   * **Corner / Edge Slide In:** Back (with native fluid ripple animations).
+   * **Bottom Center Swipe Up:** Home.
+   * **Bottom Center Swipe & Hold:** Recents Overview.
 
 Or run interactively:
 ```bash
